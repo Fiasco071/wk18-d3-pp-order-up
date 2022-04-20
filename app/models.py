@@ -1,7 +1,6 @@
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
-from sqlalchemy import ForeignKey
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -26,14 +25,16 @@ class Employee(db.Model, UserMixin):
         return check_password_hash(self.password, password)
 
 
+
 class Menu(db.Model):
     __tablename__ = "menus"
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30), nullable=False)
 
-    items = db.relationship("MenuItem", back_populates="menu_items")
+    items = db.relationship("MenuItem", back_populates="menu", cascade="all, delete-orphan")
     
+ 
  
 class MenuItem(db.Model):
     __tablename__ = "menu_items"
@@ -45,8 +46,9 @@ class MenuItem(db.Model):
     menu_id = db.Column(db.Integer, db.ForeignKey("menus.id"), nullable=False)
     menu_type_id = db.Column(db.Integer, db.ForeignKey("menu_item_types.id"), nullable=False)
 
-    menu = db.relationship("Menu", back_populates="menus", cascade="all,delete")
-    type = db.relationship("MenuItemType", back_populates="menu_item_types", cascade="all,delete")
+    menu = db.relationship("Menu", back_populates="items")
+    type = db.relationship("MenuItemType", back_populates="items")
+    
     
     
 class MenuItemType(db.Model):
@@ -55,4 +57,4 @@ class MenuItemType(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
     
-    items = db.relationship("MenuItem", back_populates="menu_items")
+    items = db.relationship("MenuItem", back_populates="type")

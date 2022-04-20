@@ -1,7 +1,6 @@
-from app.models import Employee, Menu, MenuItemType, MenuItem
+from app.models import Employee, MenuItemType, MenuItem, Menu
 from app import app, db
 
-from json import load
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -24,7 +23,6 @@ with app.app_context():
     drp = MenuItem(name="Dr. Pepper", price=1.0, type=beverages, menu=dinner)
     jambalaya = MenuItem(name="Jambalaya", price=21.98, type=entrees, menu=dinner)
     
-    db.session.add(employee)
     
     db.session.add(beverages)
     db.session.add(entrees)
@@ -34,5 +32,4 @@ with app.app_context():
     db.session.add(drp)
     db.session.add(jambalaya)
     
-
     db.session.commit()
